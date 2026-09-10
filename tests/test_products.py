@@ -1,10 +1,10 @@
-import sys
 import os
+import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from products import Product  # noqa: E402
 from categories import Category  # noqa: E402
+from products import Product  # noqa: E402
 
 
 def test_product_init():
@@ -44,13 +44,8 @@ def test_product_count():
     """Тест: подсчёт количества товаров."""
     initial_count = Category.product_count
 
-    products1 = [
-        Product("Т1", "О1", 10, 1),
-        Product("Т2", "О2", 20, 2)
-    ]
-    products2 = [
-        Product("Т3", "О3", 30, 3)
-    ]
+    products1 = [Product("Т1", "О1", 10, 1), Product("Т2", "О2", 20, 2)]
+    products2 = [Product("Т3", "О3", 30, 3)]
 
     # Создаём категории (без присваивания)
     Category("Кат1", "Описание1", products1)
@@ -76,14 +71,13 @@ def test_load_from_json_file_not_found():
 
 def test_load_from_json_invalid_json():
     """Тест: некорректный JSON."""
-    import tempfile
     import os
+    import tempfile
+
     from loaders import load_data_from_json
 
     # Создаём временный файл с некорректным JSON
-    with tempfile.NamedTemporaryFile(
-        mode='w', suffix='.json', delete=False, encoding='utf-8'
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
         f.write("{ это не json :")
         temp_file_path = f.name
 
@@ -97,8 +91,9 @@ def test_load_from_json_invalid_json():
 def test_load_from_json():
     """Тест: загрузка данных из JSON-файла."""
     import json
-    import tempfile
     import os
+    import tempfile
+
     from loaders import load_data_from_json
 
     # Создаём временный JSON-файл с тестовыми данными
@@ -112,17 +107,15 @@ def test_load_from_json():
                         "name": "Тестовый товар",
                         "description": "Описание товара",
                         "price": 100.0,
-                        "quantity": 5
+                        "quantity": 5,
                     }
-                ]
+                ],
             }
         ]
     }
 
     # Создаём временный файл
-    with tempfile.NamedTemporaryFile(
-        mode='w', suffix='.json', delete=False, encoding='utf-8'
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
         json.dump(test_data, f, ensure_ascii=False)
         temp_file_path = f.name
 

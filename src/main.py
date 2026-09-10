@@ -1,9 +1,9 @@
-from loaders import load_data_from_json
 from categories import Category
+from loaders import load_data_from_json
 
 
 def main():
-    categories = load_data_from_json('products.json')
+    categories = load_data_from_json("products.json")
 
     if not categories:
         print("Не удалось загрузить данные из JSON")
