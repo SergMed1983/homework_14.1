@@ -1,0 +1,46 @@
+{
+  "categories": [
+    {
+      "name": "Электроника",
+      "description": "Гаджеты и устройства",
+      "products": [
+        {
+          "name": "Ноутбук",
+          "description": "Мощный игровой ноутбук",
+          "price": 150000.0,
+          "quantity": 5
+        },
+        {
+          "name": "Мышь",
+          "description": "Беспроводная мышь",
+          "price": 2500.0,
+          "quantity": 20
+        },
+        {
+          "name": "Клавиатура",
+          "description": "Механическая клавиатура",
+          "price": 8000.0,
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "name": "Бытовая техника",
+      "description": "Для дома и кухни",
+      "products": [
+        {
+          "name": "Холодильник",
+          "description": "Двухкамерный холодильник",
+          "price": 45000.0,
+          "quantity": 3
+        },
+        {
+          "name": "Микроволновка",
+          "description": "С грилем",
+          "price": 12000.0,
+          "quantity": 7
+        }
+      ]
+    }
+  ]
+}
