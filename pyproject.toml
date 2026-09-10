@@ -1,5 +1,5 @@
 [project]
-name = "course-work-14-1"
+name = "homework-14-1"
 version = "0.1.0"
 description = "Интернет-магазин для курсовой работы"
 authors = [
@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "course_work_14"}]
+packages = [{include = "src"}]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

@@ -1,4 +1,5 @@
-# check.ps1 - скрипт для запуска всех проверок проекта
+﻿# check.ps1 - script for running all checks
+# Usage: .\check.ps1
 
 $ErrorActionPreference = "Stop"
 
@@ -7,20 +8,20 @@ function Write-Step($message) {
     Write-Host "===> $message" -ForegroundColor Cyan
 }
 
-Write-Step "Black: проверка форматирования"
+Write-Step "Black: format check"
 poetry run black --check src/ tests/
 
-Write-Step "Isort: проверка порядка импортов"
+Write-Step "Isort: import order check"
 poetry run isort --check-only src/ tests/
 
-Write-Step "Flake8: проверка стиля"
+Write-Step "Flake8: style and syntax check"
 poetry run flake8 src/ tests/
 
-Write-Step "Mypy: проверка типов"
+Write-Step "Mypy: type check"
 poetry run mypy src/
 
-Write-Step "Pytest: тесты с покрытием"
+Write-Step "Pytest: tests with coverage"
 poetry run pytest --cov=src tests/
 
 Write-Host ""
-Write-Host "Все проверки пройдены!" -ForegroundColor Green
+Write-Host "All checks passed!" -ForegroundColor Green
