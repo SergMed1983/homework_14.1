@@ -1,6 +1,6 @@
 [project]
-name = "homework-14-1"
-version = "0.1.0"
+name = "homework-14-2"
+version = "0.2.0"
 description = "Интернет-магазин для курсовой работы"
 authors = [
     {name = "Serg Medvedev",email = "medvserg@mail.ru"}
