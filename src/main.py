@@ -1,9 +1,9 @@
-from loaders import load_data_from_json
 from categories import Category
+from loaders import load_data_from_json
 
 
 def main():
-    categories = load_data_from_json('products.json')
+    categories = load_data_from_json("products.json")
 
     if not categories:
         print("Не удалось загрузить данные из JSON")
@@ -16,10 +16,8 @@ def main():
     for category in categories:
         print(f"\nКатегория: {category.name}")
         print(f"Описание: {category.description}")
-        print(f"Товаров в категории: {len(category.products)}")
         print("Товары:")
-        for product in category.products:
-            print(f"  - {product.name}: {product.price} руб. (в наличии: {product.quantity} шт.)")
+        print(category.products, end="")  # геттер уже возвращает готовую строку
 
     print("\n" + "=" * 50)
     print("СТАТИСТИКА")
