@@ -12,7 +12,7 @@ def test_product_init():
     product = Product("Телефон", "Смартфон", 50000.0, 10)
     assert product.name == "Телефон"
     assert product.description == "Смартфон"
-    assert product.price == 50000.0  # через геттер
+    assert product.price == 50000.0
     assert product.quantity == 10
 
 
@@ -58,7 +58,7 @@ def test_empty_category():
     assert category.products == ""
 
 
-# ---------- Новые тесты для ДЗ 14.2 ----------
+# ---------- Тесты 14.2 ----------
 
 
 def test_add_product():
@@ -153,7 +153,7 @@ def test_new_product_with_duplicate_lower_price():
     assert result.price == 100
 
 
-# ---------- Тесты loaders (обновлены) ----------
+# ---------- Тесты loaders ----------
 
 
 def test_load_from_json_file_not_found():
@@ -218,3 +218,46 @@ def test_load_from_json():
         assert "Тестовый товар, 100.0 руб. Остаток: 5 шт." in categories[0].products
     finally:
         os.unlink(temp_file_path)
+
+
+# ---------- Новые тесты 15.1 ----------
+
+
+def test_product_str():
+    """Тест: строковое отображение товара."""
+    product = Product("Яблоко", "Свежее", 80, 15)
+    assert str(product) == "Яблоко, 80 руб. Остаток: 15 шт."
+
+
+def test_category_str():
+    """Тест: строковое отображение категории — общее количество товаров."""
+    product1 = Product("Яблоко", "Свежее", 80, 15)
+    product2 = Product("Груша", "Сладкая", 120, 10)
+    category = Category("Фрукты", "Свежие фрукты", [product1, product2])
+    assert str(category) == "Фрукты, количество продуктов: 25 шт."
+
+
+def test_category_str_empty():
+    """Тест: строковое отображение пустой категории."""
+    category = Category("Пустая", "Без товаров", [])
+    assert str(category) == "Пустая, количество продуктов: 0 шт."
+
+
+def test_product_add():
+    """Тест: сложение двух товаров возвращает суммарную стоимость."""
+    a = Product("Товар A", "Описание", 100, 10)
+    b = Product("Товар B", "Описание", 200, 2)
+    assert a + b == 1400
+
+
+def test_product_add_zero_quantity():
+    """Тест: сложение с нулевым количеством."""
+    a = Product("Товар A", "Описание", 100, 0)
+    b = Product("Товар B", "Описание", 200, 2)
+    assert a + b == 400
+
+
+def test_product_add_invalid_type():
+    """Тест: сложение с не-Product возвращает NotImplemented."""
+    a = Product("Товар A", "Описание", 100, 10)
+    assert a.__add__(5) is NotImplemented
