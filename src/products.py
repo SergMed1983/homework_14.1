@@ -1,3 +1,5 @@
+"""Модуль с классом Product и его наследниками."""
+
 from typing import Optional
 
 
@@ -55,7 +57,55 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        """Сложение двух товаров: суммарная стоимость (цена × количество)."""
-        if not isinstance(other, Product):
-            return NotImplemented
+        """
+        Сложение двух товаров: суммарная стоимость (цена * количество).
+
+        Разрешено только между объектами одного и того же класса.
+        """
+        if type(self) is not type(other):
+            raise TypeError(
+                f"Нельзя складывать товары разных классов: " f"{type(self).__name__} и {type(other).__name__}"
+            )
         return self.price * self.quantity + other.price * other.quantity
+
+
+class Smartphone(Product):
+    """Класс-наследник: смартфон."""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ):
+        """Инициализация смартфона."""
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """Класс-наследник: трава газонная."""
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ):
+        """Инициализация газонной травы."""
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
