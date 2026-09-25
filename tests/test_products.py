@@ -1,10 +1,12 @@
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from categories import Category  # noqa: E402
-from products import Product  # noqa: E402
+from products import LawnGrass, Product, Smartphone  # noqa: E402
 
 
 def test_product_init():
@@ -220,7 +222,7 @@ def test_load_from_json():
         os.unlink(temp_file_path)
 
 
-# ---------- Новые тесты 15.1 ----------
+# ---------- Тесты 15.1 ----------
 
 
 def test_product_str():
@@ -258,6 +260,131 @@ def test_product_add_zero_quantity():
 
 
 def test_product_add_invalid_type():
-    """Тест: сложение с не-Product возвращает NotImplemented."""
+    """Тест: сложение с не-Product выбрасывает TypeError."""
     a = Product("Товар A", "Описание", 100, 10)
-    assert a.__add__(5) is NotImplemented
+    with pytest.raises(TypeError):
+        a + 5
+
+
+# ---------- Новые тесты 16.1 ----------
+
+
+def test_smartphone_is_subclass_of_product():
+    """Тест: Smartphone — наследник Product."""
+    assert issubclass(Smartphone, Product)
+
+
+def test_lawn_grass_is_subclass_of_product():
+    """Тест: LawnGrass — наследник Product."""
+    assert issubclass(LawnGrass, Product)
+
+
+def test_smartphone_init():
+    """Тест: корректная инициализация смартфона."""
+    phone = Smartphone(
+        "iPhone",
+        "Флагман",
+        100000,
+        2,
+        efficiency=10,
+        model="15 Pro",
+        memory=256,
+        color="black",
+    )
+    assert phone.name == "iPhone"
+    assert phone.description == "Флагман"
+    assert phone.price == 100000
+    assert phone.quantity == 2
+    assert phone.efficiency == 10
+    assert phone.model == "15 Pro"
+    assert phone.memory == 256
+    assert phone.color == "black"
+
+
+def test_lawn_grass_init():
+    """Тест: корректная инициализация газонной травы."""
+    grass = LawnGrass(
+        "Газон",
+        "Мягкая",
+        500,
+        10,
+        country="Россия",
+        germination_period="14 дней",
+        color="green",
+    )
+    assert grass.name == "Газон"
+    assert grass.description == "Мягкая"
+    assert grass.price == 500
+    assert grass.quantity == 10
+    assert grass.country == "Россия"
+    assert grass.germination_period == "14 дней"
+    assert grass.color == "green"
+
+
+def test_add_same_class_smartphones():
+    """Тест: сложение двух смартфонов работает."""
+    a = Smartphone("A", "d", 1000, 2, 5, "m1", 128, "black")
+    b = Smartphone("B", "d", 2000, 1, 7, "m2", 256, "white")
+    assert a + b == 4000
+
+
+def test_add_same_class_lawn_grass():
+    """Тест: сложение двух газонных трав работает."""
+    a = LawnGrass("A", "d", 100, 5, "RU", "14", "green")
+    b = LawnGrass("B", "d", 200, 2, "RU", "10", "green")
+    assert a + b == 900
+
+
+def test_add_different_classes_raises():
+    """Тест: сложение смартфона и травы выбрасывает TypeError."""
+    phone = Smartphone("A", "d", 1000, 2, 5, "m", 128, "black")
+    grass = LawnGrass("B", "d", 100, 5, "RU", "14", "green")
+    with pytest.raises(TypeError):
+        phone + grass
+
+
+def test_add_product_rejects_non_product():
+    """Тест: add_product отклоняет не-Product."""
+    category = Category("Фрукты", "Свежие", [])
+    with pytest.raises(TypeError):
+        category.add_product("строка")
+
+
+def test_add_product_rejects_int():
+    """Тест: add_product отклоняет число."""
+    category = Category("Фрукты", "Свежие", [])
+    with pytest.raises(TypeError):
+        category.add_product(42)
+
+
+def test_add_product_accepts_smartphone():
+    """Тест: add_product принимает наследника Product — Smartphone."""
+    category = Category("Электроника", "Гаджеты", [])
+    phone = Smartphone("A", "d", 1000, 2, 5, "m", 128, "black")
+    category.add_product(phone)
+    assert "A, 1000 руб. Остаток: 2 шт." in category.products
+
+
+def test_add_product_accepts_lawn_grass():
+    """Тест: add_product принимает наследника Product — LawnGrass."""
+    category = Category("Сад", "Для дачи", [])
+    grass = LawnGrass("Газон", "Мягкая", 500, 10, "RU", "14", "green")
+    category.add_product(grass)
+    assert "Газон, 500 руб. Остаток: 10 шт." in category.products
+
+
+def test_add_product_accepts_plain_product():
+    """Тест: add_product принимает обычный Product."""
+    category = Category("Разное", "Разные товары", [])
+    product = Product("Штука", "Обычная", 100, 1)
+    category.add_product(product)
+    assert "Штука, 100 руб. Остаток: 1 шт." in category.products
+
+
+def test_add_product_increments_product_count_with_heir():
+    """Тест: product_count растёт при добавлении наследника."""
+    initial_count = Category.product_count
+    category = Category("Электроника", "Гаджеты", [])
+    phone = Smartphone("A", "d", 1000, 2, 5, "m", 128, "black")
+    category.add_product(phone)
+    assert Category.product_count == initial_count + 1

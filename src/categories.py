@@ -1,3 +1,5 @@
+"""Модуль с классом Category."""
+
 from products import Product
 
 
@@ -17,7 +19,13 @@ class Category:
         Category.product_count += len(products)
 
     def add_product(self, product: Product):
-        """Добавляет продукт в категорию."""
+        """
+        Добавляет продукт в категорию.
+
+        Принимает только объекты Product или его наследников.
+        """
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты класса Product " "или его наследников")
         self.__products.append(product)
         Category.product_count += 1
 
