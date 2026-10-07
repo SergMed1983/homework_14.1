@@ -55,13 +55,10 @@ class BaseProduct(ABC):
 
 
 class Product(ReprMixin, BaseProduct):
-    """
-    Класс для представления товара в интернет-магазине.
-    Наследуется от ReprMixin (для логирования) и BaseProduct (для общего интерфейса).
-    """
-
     def __init__(self, name: str, description: str, price: float, quantity: int):
         """Инициализация товара."""
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__(name, description, price, quantity)
 
     @classmethod

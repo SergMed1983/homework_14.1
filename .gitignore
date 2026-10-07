@@ -8,3 +8,4 @@ venv/
 .vscode/
 .coverage
 .mypy_cache/
+htmlcov/

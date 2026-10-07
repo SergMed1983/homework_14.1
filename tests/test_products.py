@@ -1,12 +1,38 @@
 import os
-import sys
 
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+from src.categories import Category
+from src.products import LawnGrass, Product, Smartphone
 
-from categories import Category  # noqa: E402
-from products import LawnGrass, Product, Smartphone  # noqa: E402
+
+def test_product_zero_quantity_raises_value_error():
+    """Товар с нулевым количеством не создаётся."""
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Товар", "Описание", 100.0, 0)
+
+
+def test_product_positive_quantity_ok():
+    """Товар с положительным количеством создаётся успешно."""
+    product = Product("Товар", "Описание", 100.0, 5)
+    assert product.quantity == 5
+
+
+def test_average_price_with_products():
+    """Средний ценник считается корректно."""
+    products = [
+        Product("A", "desc", 100.0, 1),
+        Product("B", "desc", 200.0, 1),
+        Product("C", "desc", 300.0, 1),
+    ]
+    category = Category("Категория", "Описание", products)
+    assert category.average_price() == 200.0
+
+
+def test_average_price_empty_category_returns_zero():
+    """Пустая категория возвращает 0, а не падает с ZeroDivisionError."""
+    category = Category("Пустая", "Описание", [])
+    assert category.average_price() == 0
 
 
 def test_product_init():
@@ -160,7 +186,7 @@ def test_new_product_with_duplicate_lower_price():
 
 def test_load_from_json_file_not_found():
     """Тест: файл не найден."""
-    from loaders import load_data_from_json
+    from src.loaders import load_data_from_json
 
     categories = load_data_from_json("несуществующий_файл.json")
     assert categories == []
@@ -170,7 +196,7 @@ def test_load_from_json_invalid_json():
     """Тест: некорректный JSON."""
     import tempfile
 
-    from loaders import load_data_from_json
+    from src.loaders import load_data_from_json
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as f:
         f.write("{ это не json :")
@@ -188,7 +214,7 @@ def test_load_from_json():
     import json
     import tempfile
 
-    from loaders import load_data_from_json
+    from src.loaders import load_data_from_json
 
     test_data = {
         "categories": [
@@ -250,13 +276,6 @@ def test_product_add():
     a = Product("Товар A", "Описание", 100, 10)
     b = Product("Товар B", "Описание", 200, 2)
     assert a + b == 1400
-
-
-def test_product_add_zero_quantity():
-    """Тест: сложение с нулевым количеством."""
-    a = Product("Товар A", "Описание", 100, 0)
-    b = Product("Товар B", "Описание", 200, 2)
-    assert a + b == 400
 
 
 def test_product_add_invalid_type():

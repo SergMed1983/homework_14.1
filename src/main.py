@@ -1,5 +1,7 @@
-from categories import Category
-from loaders import load_data_from_json
+"""Точка входа для демонстрации работы магазина."""
+
+from src.categories import Category
+from src.loaders import load_data_from_json
 
 
 def main():
@@ -17,7 +19,7 @@ def main():
         print(f"\nКатегория: {category.name}")
         print(f"Описание: {category.description}")
         print("Товары:")
-        print(category.products, end="")  # геттер уже возвращает готовую строку
+        print(category.products, end="")
 
     print("\n" + "=" * 50)
     print("СТАТИСТИКА")
